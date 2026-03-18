@@ -1,0 +1,67 @@
+.app-shell {
+  min-height: 100vh;
+  background-color: var(--color-background);
+}
+
+.dashboard {
+  min-height: calc(100vh - 92px);
+  background-color: var(--color-yellow);
+}
+
+.dashboard__search-section {
+  display: flex;
+  justify-content: center;
+  padding: 40px 24px 28px;
+}
+
+.search-bar {
+  width: min(640px, 100%);
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 16px;
+  background-color: var(--color-light-gray);
+  border: var(--border-main);
+}
+
+.search-bar__icon {
+  flex-shrink: 0;
+  font-size: 1.5rem;
+  color: #8a93a5;
+}
+
+.search-bar__input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--color-black);
+  font-size: 1.25rem;
+}
+
+.search-bar__input::placeholder {
+  color: #8a93a5;
+}
+
+.dashboard__content {
+  padding: 12px 24px 32px;
+}
+
+@media (max-width: 768px) {
+  .dashboard__search-section {
+    padding: 28px 16px 20px;
+  }
+
+  .dashboard__content {
+    padding: 8px 16px 24px;
+  }
+
+  .search-bar {
+    min-height: 56px;
+  }
+
+  .search-bar__input {
+    font-size: 1rem;
+  }
+}
