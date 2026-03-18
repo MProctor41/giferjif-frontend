@@ -1,21 +1,30 @@
-function GifCard({ title, image }) {
+import "../styles/gifCard.css";
+
+function GifCard({ title }) {
   return (
-    <div style={{border: "1px solid black", padding: "10px", width: "200px"}}>
-
-      <img
-        src={image}
-        alt={title}
-        style={{width: "100%"}}
-      />
-
-      <h4>{title}</h4>
-
-      <div style={{display: "flex", gap: "10px"}}>
-        <button>Copy</button>
-        <button>❤</button>
+    <article className="gif-card">
+      <div className="gif-card__placeholder" aria-label={`${title} preview placeholder`}>
+        <span className="gif-card__placeholder-text">GIF PREVIEW</span>
       </div>
 
-    </div>
+      <div className="gif-card__content">
+        <h3 className="gif-card__title">{title}</h3>
+
+        <div className="gif-card__actions">
+          <button className="gif-card__copy-button" type="button">
+            COPY
+          </button>
+
+          <button
+            className="gif-card__favorite-button"
+            type="button"
+            aria-label={`Add ${title} to favorites`}
+          >
+            ♡
+          </button>
+        </div>
+      </div>
+    </article>
   );
 }
 
