@@ -3,7 +3,10 @@ import "../styles/gifCard.css";
 function GifCard({ title }) {
   return (
     <article className="gif-card">
-      <div className="gif-card__placeholder" aria-label={`${title} preview placeholder`}>
+      <div
+        className="gif-card__placeholder"
+        aria-label={`${title} preview placeholder`}
+      >
         <span className="gif-card__placeholder-text">GIF PREVIEW</span>
       </div>
 
