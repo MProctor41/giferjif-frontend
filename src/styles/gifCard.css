@@ -1,8 +1,14 @@
 .gif-card {
   background-color: var(--color-light-gray);
   border: var(--border-main);
-  box-shadow: var(--shadow-main);
+  box-shadow: 6px 6px 0 var(--color-black);
   overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.gif-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 var(--color-black);
 }
 
 .gif-card__placeholder {
@@ -42,6 +48,7 @@
 }
 
 .gif-card__title {
+  min-height: 54px;
   margin: 0 0 14px;
   font-size: 1.1rem;
   font-weight: 900;
@@ -56,6 +63,12 @@
   gap: 8px;
 }
 
+.gif-card__copy-button,
+.gif-card__favorite-button {
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease,
+    color 0.12s ease;
+}
+
 .gif-card__copy-button {
   flex: 1;
   padding: 10px 12px;
@@ -66,6 +79,22 @@
   font-size: 1rem;
   font-weight: 900;
   text-transform: uppercase;
+}
+
+.gif-card__copy-button:hover,
+.gif-card__favorite-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--color-black);
+}
+
+.gif-card__copy-button:active,
+.gif-card__favorite-button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--color-black);
+}
+
+.gif-card__copy-button--copied {
+  background-color: #11a34a;
 }
 
 .gif-card__favorite-button {
@@ -81,4 +110,9 @@
   padding: 0;
   font-size: 1.2rem;
   line-height: 1;
+}
+
+.gif-card__favorite-button--active {
+  background-color: var(--color-red);
+  color: var(--color-white);
 }

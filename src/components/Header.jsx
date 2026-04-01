@@ -1,6 +1,6 @@
 import "../styles/header.css";
 
-function Header() {
+function Header({ favoritesCount, showFavoritesOnly, onToggleFavorites }) {
   return (
     <header className="header">
       <div className="header__spacer" />
@@ -9,9 +9,15 @@ function Header() {
         GIFER<span className="header__title-accent">JIF</span>
       </h1>
 
-      <button className="favorites-button" type="button">
+      <button
+        className={`favorites-button ${
+          showFavoritesOnly ? "favorites-button--active" : ""
+        }`}
+        type="button"
+        onClick={onToggleFavorites}
+      >
         <span className="favorites-button__icon">♥</span>
-        FAVORITES
+        {showFavoritesOnly ? "SHOW ALL" : `FAVORITES (${favoritesCount})`}
       </button>
     </header>
   );
