@@ -1,5 +1,7 @@
 import "../styles/header.css";
 
+import "../styles/header.css";
+
 function Header({ favoritesCount, showFavoritesOnly, onToggleFavorites }) {
   return (
     <header className="header">
@@ -24,3 +26,4 @@ function Header({ favoritesCount, showFavoritesOnly, onToggleFavorites }) {
 }
 
 export default Header;
+
