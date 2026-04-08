@@ -1,10 +1,26 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../styles/gifCard.css";
 
 function GifCard({ gif, isFavorited, onFavoriteToggle }) {
   const [copied, setCopied] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    setImageLoaded(false);
+    setImageError(false);
+
+    timeoutRef.current = window.setTimeout(() => {
+      setImageError(true);
+    }, 5000);
+
+    return () => {
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [gif.imageUrl]);
 
   async function handleCopyClick() {
     const textToCopy = gif.copyUrl || gif.imageUrl || gif.title;
@@ -18,6 +34,24 @@ function GifCard({ gif, isFavorited, onFavoriteToggle }) {
       }, 1400);
     } catch (error) {
       console.error("Failed to copy GIF link.", error);
+    }
+  }
+
+  function handleImageLoad() {
+    setImageLoaded(true);
+    setImageError(false);
+
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current);
+    }
+  }
+
+  function handleImageError() {
+    setImageError(true);
+    setImageLoaded(false);
+
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current);
     }
   }
 
@@ -39,11 +73,8 @@ function GifCard({ gif, isFavorited, onFavoriteToggle }) {
               src={gif.imageUrl}
               alt={gif.title}
               loading="lazy"
-              onLoad={() => setImageLoaded(true)}
-              onError={() => {
-                setImageError(true);
-                setImageLoaded(false);
-              }}
+              onLoad={handleImageLoad}
+              onError={handleImageError}
             />
           </>
         ) : (

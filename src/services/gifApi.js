@@ -7,32 +7,32 @@ const fallbackGifs = [
   {
     id: "1",
     title: "Funny Cat Reaction",
-    imageUrl: "https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif",
-    copyUrl: "https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif",
+    imageUrl: "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",
+    copyUrl: "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",
   },
   {
     id: "2",
     title: "Dog Jumping Excited",
-    imageUrl: "https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif",
-    copyUrl: "https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif",
+    imageUrl: "https://media.giphy.com/media/26BRuo6sLetdllPAQ/giphy.gif",
+    copyUrl: "https://media.giphy.com/media/26BRuo6sLetdllPAQ/giphy.gif",
   },
   {
     id: "3",
     title: "Dancing Celebration",
-    imageUrl: "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif",
-    copyUrl: "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif",
+    imageUrl: "https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif",
+    copyUrl: "https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif",
   },
   {
     id: "4",
     title: "Confused Expression",
-    imageUrl: "https://media.giphy.com/media/3o7aCTfyhYawdOXcFW/giphy.gif",
-    copyUrl: "https://media.giphy.com/media/3o7aCTfyhYawdOXcFW/giphy.gif",
+    imageUrl: "https://media.giphy.com/media/3o7TKTDn976rzVgky4/giphy.gif",
+    copyUrl: "https://media.giphy.com/media/3o7TKTDn976rzVgky4/giphy.gif",
   },
   {
     id: "5",
     title: "Happy Baby Laughing",
-    imageUrl: "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
-    copyUrl: "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
+    imageUrl: "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif",
+    copyUrl: "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif",
   },
   {
     id: "6",
@@ -43,14 +43,14 @@ const fallbackGifs = [
   {
     id: "7",
     title: "Clapping Applause",
-    imageUrl: "https://media.giphy.com/media/13G7hmmFr9yuxG/giphy.gif",
-    copyUrl: "https://media.giphy.com/media/13G7hmmFr9yuxG/giphy.gif",
+    imageUrl: "https://media.giphy.com/media/OkJat1YNdoD3W/giphy.gif",
+    copyUrl: "https://media.giphy.com/media/OkJat1YNdoD3W/giphy.gif",
   },
   {
     id: "8",
     title: "Shocked Surprised",
-    imageUrl: "https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif",
-    copyUrl: "https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif",
+    imageUrl: "https://media.giphy.com/media/5VKbvrjxpVJCM/giphy.gif",
+    copyUrl: "https://media.giphy.com/media/5VKbvrjxpVJCM/giphy.gif",
   },
 ];
 
