@@ -75,11 +75,23 @@ function normalizeGif(rawGif, index) {
   };
 }
 
+function getFallbackResults(query = "") {
+  const trimmedQuery = query.trim().toLowerCase();
+
+  if (!trimmedQuery) {
+    return fallbackGifs.map(normalizeGif);
+  }
+
+  return fallbackGifs
+    .filter((gif) => gif.title.toLowerCase().includes(trimmedQuery))
+    .map(normalizeGif);
+}
+
 export async function searchGifs(query = "") {
   const trimmedQuery = query.trim();
 
   if (!trimmedQuery) {
-    return fallbackGifs;
+    return getFallbackResults();
   }
 
   const headers = API_KEY
@@ -91,20 +103,25 @@ export async function searchGifs(query = "") {
         "Content-Type": "application/json",
       };
 
-  const response = await fetch(
-    `${API_BASE_URL}/gifs/search?q=${encodeURIComponent(trimmedQuery)}`,
-    {
-      method: "GET",
-      headers,
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/gifs/search?q=${encodeURIComponent(trimmedQuery)}`,
+      {
+        method: "GET",
+        headers,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
     }
-  );
 
-  if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
+    const data = await response.json();
+    const results = Array.isArray(data) ? data : data.results || data.gifs || [];
+
+    return results.map(normalizeGif);
+  } catch (error) {
+    console.warn("Using fallback GIF data because API search failed.", error);
+    return getFallbackResults(trimmedQuery);
   }
-
-  const data = await response.json();
-  const results = Array.isArray(data) ? data : data.results || data.gifs || [];
-
-  return results.map(normalizeGif);
 }
