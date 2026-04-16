@@ -109,78 +109,81 @@ function Dashboard() {
   }
 
   const statusText = showFavoritesOnly
-    ? `Showing ${filteredGifs.length} favorite${
-        filteredGifs.length === 1 ? "" : "s"
+      ? `Showing ${filteredGifs.length} favorite${
+          filteredGifs.length === 1 ? "" : "s"
       }`
-    : `Showing ${filteredGifs.length} GIF${
-        filteredGifs.length === 1 ? "" : "s"
+      : `Showing ${filteredGifs.length} GIF${
+          filteredGifs.length === 1 ? "" : "s"
       }`;
 
   return (
-    <div className="app-shell">
-      <Header
-        favoritesCount={favoriteIds.length}
-        showFavoritesOnly={showFavoritesOnly}
-        onToggleFavorites={handleFavoritesViewToggle}
-      />
+      <div className="app-shell">
+        <Header
+            favoritesCount={favoriteIds.length}
+            showFavoritesOnly={showFavoritesOnly}
+            onToggleFavorites={handleFavoritesViewToggle}
+        />
 
-      <main className="dashboard">
-        <section className="dashboard__search-section">
-          <div className="dashboard__search-stack">
-            <div className="search-bar">
+
+        <main className={`dashboard ${showFavoritesOnly ? "dashboard--favorites" : ""}`}>
+          <section className="dashboard__search-section">
+            <div className="dashboard__search-stack">
+              <div className="search-bar">
               <span className="search-bar__icon" aria-hidden="true">
                 ⌕
               </span>
 
-              <input
-                className="search-bar__input"
-                type="text"
-                placeholder="Search GIFs..."
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                aria-label="Search GIFs"
-              />
-            </div>
+                <input
+                    className="search-bar__input"
+                    type="text"
+                    placeholder={showFavoritesOnly ? "Search Favorites..." : "Search GIFs..."}
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                    aria-label="Search GIFs"
+                />
+              </div>
 
-            <div className="dashboard__toolbar">
-              <p className="dashboard__status">{statusText}</p>
+              <div className="dashboard__toolbar">
+                <p className="dashboard__status">{statusText}</p>
 
-              {query && (
-                <button
-                  className="dashboard__clear-button"
-                  type="button"
-                  onClick={handleClearSearch}
-                >
-                  Clear Search
-                </button>
-              )}
+                {query && (
+                    <button
+                        className="dashboard__clear-button"
+                        type="button"
+                        onClick={handleClearSearch}
+                    >
+                      Clear Search
+                    </button>
+                )}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="dashboard__content">
-          {isLoading ? (
-            <div className="dashboard__message-card">Loading GIFs...</div>
-          ) : errorMessage ? (
-            <div className="dashboard__message-card">{errorMessage}</div>
-          ) : filteredGifs.length > 0 ? (
-            <GifGrid
-              gifs={filteredGifs}
-              favoriteIds={favoriteIds}
-              onFavoriteToggle={handleFavoriteToggle}
-            />
-          ) : (
-            <div className="dashboard__message-card">
-              {showFavoritesOnly
-                ? "No favorite GIFs match this view."
-                : hasSearched
-                ? "No GIFs found. Try a different search."
-                : "Start by searching for a GIF."}
-            </div>
-          )}
-        </section>
-      </main>
-    </div>
+          <section className="dashboard__content">
+            {isLoading ? (
+                <div className="dashboard__message-card">Loading GIFs...</div>
+            ) : errorMessage ? (
+                <div className="dashboard__message-card">{errorMessage}</div>
+            ) : filteredGifs.length > 0 ? (
+                <GifGrid
+                    gifs={filteredGifs}
+                    favoriteIds={favoriteIds}
+                    onFavoriteToggle={handleFavoriteToggle}
+                />
+            ) : (
+                <div className="dashboard__message-card">
+                  {showFavoritesOnly
+                      ? "No favorite GIFs match this view."
+                      : hasSearched
+                          ? "No GIFs found. Try a different search."
+                          : "Start by searching for a GIF."}
+                </div>
+            )}
+          </section>
+
+        </main>
+
+      </div>
   );
 }
 
