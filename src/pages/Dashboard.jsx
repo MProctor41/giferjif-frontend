@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import Header from "../components/Header";
 import GifGrid from "../components/GifGrid";
-import { searchGifs } from "../services/gifApi";
+import { recordGifUsage, searchGifs } from "../services/gifApi";
 import "../styles/dashboard.css";
 
 function Dashboard() {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [gifs, setGifs] = useState([]);
+  const [searchId, setSearchId] = useState(null);
   const [favoriteIds, setFavoriteIds] = useState(() => {
     const savedFavorites = localStorage.getItem("favoriteGifIds");
 
@@ -45,14 +46,15 @@ function Dashboard() {
       setErrorMessage("");
 
       try {
-        const results = await searchGifs(debouncedQuery);
+        const data = await searchGifs(debouncedQuery);
 
         if (!isActive) {
           return;
         }
 
-        setGifs(results);
+        setGifs(data.results);
         setHasSearched(debouncedQuery.trim().length > 0);
+        setSearchId(data.searchId);
       } catch (error) {
         if (!isActive) {
           return;
@@ -60,6 +62,7 @@ function Dashboard() {
 
         console.error("Failed to load GIFs.", error);
         setGifs([]);
+        setSearchId(null);
         setHasSearched(debouncedQuery.trim().length > 0);
         setErrorMessage("Could not load GIFs right now. Please try again.");
       } finally {
@@ -107,6 +110,18 @@ function Dashboard() {
   function handleClearSearch() {
     setQuery("");
   }
+
+  async function handleGifCopy(gifId) {
+  if (!searchId) {
+    return;
+  }
+
+  try {
+    await recordGifUsage(gifId, searchId);
+  } catch (error) {
+    console.error("Failed to record GIF usage.", error);
+  }
+}
 
   const statusText = showFavoritesOnly
     ? `Showing ${filteredGifs.length} favorite${
@@ -168,6 +183,7 @@ function Dashboard() {
               gifs={filteredGifs}
               favoriteIds={favoriteIds}
               onFavoriteToggle={handleFavoriteToggle}
+              onGifCopy={handleGifCopy}
             />
           ) : (
             <div className="dashboard__message-card">
