@@ -182,3 +182,27 @@ export async function recordGifUsage(gifId, searchId) {
 
   return response.json();
 }
+
+export async function getTrendingGifs() {
+  const headers = API_KEY
+    ? {
+        "Content-Type": "application/json",
+        "X-API-Key": API_KEY,
+      }
+    : {
+        "Content-Type": "application/json",
+      };
+
+  const response = await fetch(`${API_BASE_URL}/trending`, {
+    method: "GET",
+    headers,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Trending request failed with status ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  return data.results || [];
+}
