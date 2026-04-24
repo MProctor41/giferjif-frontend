@@ -105,8 +105,31 @@ function Dashboard() {
     });
   }
 
-  function handleFavoritesViewToggle() {
-    setShowFavoritesOnly((currentValue) => !currentValue);
+  async function handleFavoritesViewToggle() {
+    const nextShowFavoritesOnly = !showFavoritesOnly;
+
+    setShowFavoritesOnly(nextShowFavoritesOnly);
+
+    if (nextShowFavoritesOnly && viewMode === "trending") {
+      setViewMode("search");
+      setQuery("");
+      setDebouncedQuery("");
+      setSearchId(null);
+      setHasSearched(false);
+      setErrorMessage("");
+      setIsLoading(true);
+
+      try {
+        const data = await searchGifs("");
+        setGifs(data.results);
+      } catch (error) {
+        console.error("Failed to reload GIFs for favorites.", error);
+        setGifs([]);
+        setErrorMessage("Could not load favorite GIFs right now. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    }
   }
 
 async function handleClearSearch() {
@@ -165,16 +188,18 @@ async function handleLoadTrending() {
 }
 
   const statusText = showFavoritesOnly
-    ? `Showing ${filteredGifs.length} favorite${
+    ? `❤️ ${filteredGifs.length} saved favorite${
         filteredGifs.length === 1 ? "" : "s"
-      }`
+      } `
     : viewMode === "trending"
-    ? `Showing ${filteredGifs.length} trending GIF${
+    ? `🔥 ${filteredGifs.length} trending GIF${
         filteredGifs.length === 1 ? "" : "s"
-      }`
-    : `Showing ${filteredGifs.length} GIF${
-      filteredGifs.length === 1 ? "" : "s"
-    }`;
+      } right now`
+    : hasSearched
+    ? `Found ${filteredGifs.length} GIF${
+        filteredGifs.length === 1 ? "" : "s"
+      } for "${query}"`
+    : `Start by searching for a GIF`;
 
   return (
     <div className="app-shell">
@@ -182,6 +207,10 @@ async function handleLoadTrending() {
         favoritesCount={favoriteIds.length}
         showFavoritesOnly={showFavoritesOnly}
         onToggleFavorites={handleFavoritesViewToggle}
+        viewMode={viewMode}
+        onToggleTrending={
+          viewMode === "trending" ? handleClearSearch : handleLoadTrending
+        }
       />
 
       <main className="dashboard">
@@ -204,17 +233,6 @@ async function handleLoadTrending() {
 
             <div className="dashboard__toolbar">
               <p className="dashboard__status">{statusText}</p>
-              <button
-                className="dashboard__clear-button"
-                type="button"
-                onClick={
-                  viewMode === "trending"
-                    ? handleClearSearch
-                    : handleLoadTrending
-                }
-              >
-                {viewMode === "trending" ? "Back to main page" : "Trending"}
-              </button>
 
               {query && (
                 <button
