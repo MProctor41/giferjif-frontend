@@ -10,6 +10,8 @@ function Dashboard() {
   const [gifs, setGifs] = useState([]);
   const [searchId, setSearchId] = useState(null);
   const [viewMode, setViewMode] = useState("search");
+  const [offset, setOffset] = useState(0);
+  const [hasMoreResults, setHasMoreResults] = useState(false);
   const [favoriteIds, setFavoriteIds] = useState(() => {
     const savedFavorites = localStorage.getItem("favoriteGifIds");
 
@@ -26,6 +28,7 @@ function Dashboard() {
   });
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -47,13 +50,15 @@ function Dashboard() {
       setErrorMessage("");
 
       try {
-        const data = await searchGifs(debouncedQuery);
+        const data = await searchGifs(debouncedQuery, 0, 24);
 
         if (!isActive) {
           return;
         }
 
         setGifs(data.results);
+        setOffset(data.results.length);
+        setHasMoreResults(data.results.length === 24);
         setHasSearched(debouncedQuery.trim().length > 0);
         setSearchId(data.searchId);
         setViewMode("search");
@@ -105,8 +110,31 @@ function Dashboard() {
     });
   }
 
-  function handleFavoritesViewToggle() {
-    setShowFavoritesOnly((currentValue) => !currentValue);
+  async function handleFavoritesViewToggle() {
+    const nextShowFavoritesOnly = !showFavoritesOnly;
+
+    setShowFavoritesOnly(nextShowFavoritesOnly);
+
+    if (nextShowFavoritesOnly && viewMode === "trending") {
+      setViewMode("search");
+      setQuery("");
+      setDebouncedQuery("");
+      setSearchId(null);
+      setHasSearched(false);
+      setErrorMessage("");
+      setIsLoading(true);
+
+      try {
+        const data = await searchGifs("");
+        setGifs(data.results);
+      } catch (error) {
+        console.error("Failed to reload GIFs for favorites.", error);
+        setGifs([]);
+        setErrorMessage("Could not load favorite GIFs right now. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    }
   }
 
 async function handleClearSearch() {
@@ -164,17 +192,47 @@ async function handleLoadTrending() {
   }
 }
 
+function handleGifLoadError(gifId) {
+  setGifs((currentGifs) =>
+    currentGifs.filter((gif) => gif.id !== gifId)
+  );
+}
+
+async function handleLoadMore() {
+  if (!debouncedQuery.trim()) {
+    return;
+  }
+
+  setIsLoadingMore(true);
+  setErrorMessage("");
+
+  try {
+    const data = await searchGifs(debouncedQuery, offset, 24);
+
+    setGifs((currentGifs) => [...currentGifs, ...data.results]);
+    setOffset((currentOffset) => currentOffset + data.results.length);
+    setHasMoreResults(data.results.length === 24);
+  } catch (error) {
+    console.error("Failed to load more GIFs.", error);
+    setErrorMessage("Could not load more GIFs right now. Please try again.");
+  } finally {
+    setIsLoadingMore(false);
+  }
+}
+
   const statusText = showFavoritesOnly
-    ? `Showing ${filteredGifs.length} favorite${
+    ? `❤️ ${filteredGifs.length} saved favorite${
         filteredGifs.length === 1 ? "" : "s"
-      }`
+      } `
     : viewMode === "trending"
-    ? `Showing ${filteredGifs.length} trending GIF${
+    ? `🔥 ${filteredGifs.length} trending GIF${
         filteredGifs.length === 1 ? "" : "s"
-      }`
-    : `Showing ${filteredGifs.length} GIF${
-      filteredGifs.length === 1 ? "" : "s"
-    }`;
+      } right now`
+    : hasSearched
+    ? `Found ${filteredGifs.length} GIF${
+        filteredGifs.length === 1 ? "" : "s"
+      } for "${query}"`
+    : `Start by searching for a GIF`;
 
   return (
     <div className="app-shell">
@@ -182,6 +240,10 @@ async function handleLoadTrending() {
         favoritesCount={favoriteIds.length}
         showFavoritesOnly={showFavoritesOnly}
         onToggleFavorites={handleFavoritesViewToggle}
+        viewMode={viewMode}
+        onToggleTrending={
+          viewMode === "trending" ? handleClearSearch : handleLoadTrending
+        }
       />
 
       <main className="dashboard">
@@ -204,17 +266,6 @@ async function handleLoadTrending() {
 
             <div className="dashboard__toolbar">
               <p className="dashboard__status">{statusText}</p>
-              <button
-                className="dashboard__clear-button"
-                type="button"
-                onClick={
-                  viewMode === "trending"
-                    ? handleClearSearch
-                    : handleLoadTrending
-                }
-              >
-                {viewMode === "trending" ? "Back to main page" : "Trending"}
-              </button>
 
               {query && (
                 <button
@@ -235,12 +286,26 @@ async function handleLoadTrending() {
           ) : errorMessage ? (
             <div className="dashboard__message-card">{errorMessage}</div>
           ) : filteredGifs.length > 0 ? (
+          <>
             <GifGrid
               gifs={filteredGifs}
               favoriteIds={favoriteIds}
               onFavoriteToggle={handleFavoriteToggle}
               onGifCopy={handleGifCopy}
+              onGifLoadError={handleGifLoadError}
             />
+
+            {hasMoreResults && viewMode === "search" && !showFavoritesOnly && (
+              <button
+                className="dashboard__clear-button"
+                type="button"
+                onClick={handleLoadMore}
+                disabled={isLoadingMore}
+              >
+                {isLoadingMore ? "Loading more..." : "Load More"}
+              </button>
+            )}
+          </>
           ) : (
             <div className="dashboard__message-card">
               {showFavoritesOnly
