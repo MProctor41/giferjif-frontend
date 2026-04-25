@@ -66,10 +66,6 @@ function GifCard({
       window.clearTimeout(timeoutRef.current);
     }
   }
-
-  if (imageError) {
-  return null;
-  }
   
   return (
     <article className="gif-card">
@@ -123,7 +119,7 @@ function GifCard({
               isFavorited ? "gif-card__favorite-button--active" : ""
             }`}
             type="button"
-            onClick={() => onFavoriteToggle(gif.id)}
+            onClick={() => onFavoriteToggle(gif)}
             aria-label={
               isFavorited
                 ? `Remove ${gif.title} from favorites`
