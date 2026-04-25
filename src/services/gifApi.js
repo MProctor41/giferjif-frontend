@@ -104,7 +104,7 @@ function dedupeGifs(gifs) {
   });
 }
 
-export async function searchGifs(query = "") {
+export async function searchGifs(query = "", offset = 0, limit = 10) {
   const trimmedQuery = query.trim();
 
   if (!trimmedQuery) {
@@ -125,7 +125,7 @@ export async function searchGifs(query = "") {
 
   try {
     const response = await fetch(
-      `${API_BASE_URL}/search?q=${encodeURIComponent(trimmedQuery)}`,
+      `${API_BASE_URL}/search?q=${encodeURIComponent(trimmedQuery)}&limit=${limit}&offset=${offset}`,
       {
         method: "GET",
         headers,

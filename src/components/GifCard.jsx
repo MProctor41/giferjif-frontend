@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import "../styles/gifCard.css";
 
-function GifCard({ gif, isFavorited, onFavoriteToggle, onGifCopy }) {
+function GifCard({
+  gif,
+  isFavorited,
+  onFavoriteToggle,
+  onGifCopy,
+  onGifLoadError,
+}) {
   const [copied, setCopied] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -11,16 +17,17 @@ function GifCard({ gif, isFavorited, onFavoriteToggle, onGifCopy }) {
     setImageLoaded(false);
     setImageError(false);
 
-    timeoutRef.current = window.setTimeout(() => {
-      setImageError(true);
-    }, 5000);
+  timeoutRef.current = window.setTimeout(() => {
+    setImageError(true);
+    setImageLoaded(false);
+  }, 5000);
 
     return () => {
       if (timeoutRef.current) {
         window.clearTimeout(timeoutRef.current);
       }
     };
-  }, [gif.imageUrl]);
+  }, [gif.imageUrl, gif.id]);
 
   async function handleCopyClick() {
     const textToCopy = gif.copyUrl || gif.imageUrl || gif.title;
@@ -60,6 +67,10 @@ function GifCard({ gif, isFavorited, onFavoriteToggle, onGifCopy }) {
     }
   }
 
+  if (imageError) {
+  return null;
+  }
+  
   return (
     <article className="gif-card">
       <div className="gif-card__media">
