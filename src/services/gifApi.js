@@ -222,5 +222,6 @@ export async function getTrendingGifs() {
 
   const data = await response.json();
 
-  return data.results || [];
+  const results = data.results || [];
+  return dedupeGifs(results.map(normalizeGif));
 }

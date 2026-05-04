@@ -178,6 +178,7 @@ async function handleClearSearch() {
     const data = await searchGifs(discoveryQuery, 0, 24);
 
     setGifs(data.results);
+    setSearchId(data.searchId);
     setOffset(data.results.length);
     setHasMoreResults(data.results.length === 24);
   } catch (error) {
@@ -239,6 +240,7 @@ async function handleLoadMore() {
   try {
     const data = await searchGifs(debouncedQuery, offset, 24);
 
+    setSearchId(data.searchId || searchId);
     setGifs((currentGifs) => [...currentGifs, ...data.results]);
     setOffset((currentOffset) => currentOffset + data.results.length);
     setHasMoreResults(data.results.length === 24);
