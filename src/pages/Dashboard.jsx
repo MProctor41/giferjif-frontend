@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import Header from "../components/Header";
 import GifGrid from "../components/GifGrid";
-import { getTrendingGifs, recordGifUsage, searchGifs } from "../services/gifApi";
+import {
+  getRandomDiscoveryQuery,
+  getTrendingGifs,
+  recordGifUsage,
+  searchGifs,
+} from "../services/gifApi";
 import "../styles/dashboard.css";
 
 function Dashboard() {
@@ -55,7 +60,11 @@ function Dashboard() {
       setErrorMessage("");
 
       try {
-        const data = await searchGifs(debouncedQuery, 0, 24);
+        const searchTerm = debouncedQuery.trim()
+          ? debouncedQuery
+          : getRandomDiscoveryQuery();
+
+        const data = await searchGifs(searchTerm, 0, 24);
 
         if (!isActive) {
           return;
@@ -136,8 +145,11 @@ function Dashboard() {
       setIsLoading(true);
 
       try {
-        const data = await searchGifs("");
+        const discoveryQuery = getRandomDiscoveryQuery();
+        const data = await searchGifs(discoveryQuery, 0, 24);
         setGifs(data.results);
+        setOffset(data.results.length);
+        setHasMoreResults(data.results.length === 24);
       } catch (error) {
         console.error("Failed to reload GIFs for favorites.", error);
         setGifs([]);
@@ -156,13 +168,21 @@ async function handleClearSearch() {
   setHasSearched(false);
   setShowFavoritesOnly(false);
   setErrorMessage("");
+  setOffset(0);
+  setHasMoreResults(false);
+  setGifs([]);
   setIsLoading(true);
 
   try {
-    const data = await searchGifs("");
+    const discoveryQuery = getRandomDiscoveryQuery();
+    const data = await searchGifs(discoveryQuery, 0, 24);
+
     setGifs(data.results);
+    setSearchId(data.searchId);
+    setOffset(data.results.length);
+    setHasMoreResults(data.results.length === 24);
   } catch (error) {
-    console.error("Failed to reload main GIFs.", error);
+    console.error("Failed to reload discovery GIFs.", error);
     setGifs([]);
     setErrorMessage("Could not load GIFs right now. Please try again.");
   } finally {
@@ -220,6 +240,7 @@ async function handleLoadMore() {
   try {
     const data = await searchGifs(debouncedQuery, offset, 24);
 
+    setSearchId(data.searchId || searchId);
     setGifs((currentGifs) => [...currentGifs, ...data.results]);
     setOffset((currentOffset) => currentOffset + data.results.length);
     setHasMoreResults(data.results.length === 24);
