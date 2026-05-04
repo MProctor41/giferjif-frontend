@@ -119,3 +119,131 @@
 .trending-button--active {
   background-color: #ff3c00;
 }
+
+.header__search {
+  justify-self: center;
+  width: 100%;
+  max-width: 500px;
+  padding: 6px 10px;
+  transition: flex-basis 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  border-color: var(--color-black);
+
+}
+
+.header__search:focus-within {
+  flex: 0 0 400px;
+  background-color: #cfcfcf;
+}
+.header__search:hover{
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--color-black);
+}
+
+.header__actions {
+  justify-self: end;
+  display: flex;
+  gap: 12px;
+}
+
+
+
+.header__title-accent {
+  color: var(--color-blue);
+}
+
+.favorites-button {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: var(--border-main);
+  box-shadow: var(--shadow-main);
+  background-color: var(--color-red);
+  color: var(--color-white);
+  font-size: 0.95rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+.favorites-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--color-black);
+}
+
+.favorites-button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--color-black);
+}
+
+.favorites-button--active {
+  background-color: var(--color-blue);
+}
+
+.favorites-button__icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .header {
+    height: auto;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .header__spacer {
+    display: none;
+  }
+
+  .header__title,
+  .favorites-button {
+    justify-self: center;
+  }
+
+  .header__title {
+    font-size: 2rem;
+  }
+}
+
+.header__actions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.trending-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: var(--border-main);
+  box-shadow: var(--shadow-main);
+  background-color: #ff7a18;
+  color: var(--color-white);
+  font-size: 0.95rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+.trending-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--color-black);
+}
+
+.trending-button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--color-black);
+}
+
+.trending-button--active {
+  background-color: #ff3c00;
+}
