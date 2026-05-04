@@ -3,6 +3,24 @@ const API_BASE_URL =
 
 const API_KEY = import.meta.env.VITE_API_KEY || "";
 
+const discoveryQueries = [
+  "funny",
+  "dog",
+  "cat",
+  "happy",
+  "dance",
+  "reaction",
+  "wow",
+  "sports",
+  "excited",
+  "celebration",
+];
+
+export function getRandomDiscoveryQuery() {
+  const randomIndex = Math.floor(Math.random() * discoveryQueries.length);
+  return discoveryQueries[randomIndex];
+}
+
 const fallbackGifs = [
   {
     id: "1",
@@ -104,14 +122,14 @@ function dedupeGifs(gifs) {
   });
 }
 
-export async function searchGifs(query = "", offset = 0, limit = 10) {
+export async function searchGifs(query = "", offset = 0, limit = 24) {
   const trimmedQuery = query.trim();
 
   if (!trimmedQuery) {
     return {
       searchId: null,
-      results: getFallbackResults(),
-};
+      results: [],
+    };
   }
 
   const headers = API_KEY
