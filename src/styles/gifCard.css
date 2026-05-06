@@ -1,4 +1,5 @@
 .gif-card {
+  position: relative;
   background-color: var(--color-light-gray);
   border: var(--border-main);
   box-shadow: 6px 6px 0 var(--color-black);
@@ -14,8 +15,7 @@
 .gif-card__media {
   position: relative;
   width: 100%;
-  height: 190px;
-  border-bottom: var(--border-main);
+  height: 230px;
   background-color: #dcdcdc;
   overflow: hidden;
 }
@@ -64,17 +64,30 @@
 }
 
 .gif-card__content {
-  padding: 14px 14px 12px;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 12px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0.08)
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+
+.gif-card:hover .gif-card__content {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .gif-card__title {
-  min-height: 54px;
-  margin: 0 0 14px;
-  font-size: 1.1rem;
-  font-weight: 900;
-  line-height: 1.2;
-  text-transform: uppercase;
-  color: var(--color-black);
+  display: none;
 }
 
 .gif-card__actions {

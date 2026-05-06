@@ -4,16 +4,16 @@ const API_BASE_URL =
 const API_KEY = import.meta.env.VITE_API_KEY || "";
 
 const discoveryQueries = [
-  "funny",
   "dog",
   "cat",
+  "hello",
   "happy",
   "dance",
-  "reaction",
-  "wow",
-  "sports",
-  "excited",
-  "celebration",
+  "mad",
+  "angry",
+  "celebrity",
+  "rock",
+  "show",
 ];
 
 export function getRandomDiscoveryQuery() {
